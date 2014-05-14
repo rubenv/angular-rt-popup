@@ -81,6 +81,23 @@ Adds extra classes to the popover wrapper.
 <a popup-show="popup.html" popup-class="custom-style">Show popup!</a>
 ```
 
+### `popup-shown`
+
+A function that will be called when the popup is shown.
+
+```html
+<a popup-show="popup.html" popup-shown="onShown()">Show popup!</a>
+```
+
+### `popup-hidden`
+
+A function that will be called when the popup is hidden.
+
+```html
+<a popup-show="popup.html" popup-hidden="onHidden()">Show popup!</a>
+```
+
+
 ## License 
 
     (The MIT License)
