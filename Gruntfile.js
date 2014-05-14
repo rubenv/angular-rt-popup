@@ -6,7 +6,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-jscs-checker');
-    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ngmin');
 
     grunt.initConfig({
@@ -24,14 +23,6 @@ module.exports = function (grunt) {
                     src: ['src/**/*.js']
                 }
             },
-            test: {
-                options: {
-                    jshintrc: '.jshintrc-test'
-                },
-                files: {
-                    src: ['*.js', 'test/**/*.js']
-                }
-            }
         },
 
         jscs: {
@@ -40,7 +31,7 @@ module.exports = function (grunt) {
                     config: '.jscs.json'
                 },
                 files: {
-                    src: ['*.js', '{src,test}/**/*.js']
+                    src: ['*.js', 'src/**/*.js']
                 }
             },
         },
@@ -67,8 +58,8 @@ module.exports = function (grunt) {
 
         watch: {
             all: {
-                files: ['src/**.js', 'test/*{,/*}'],
-                tasks: ['build', 'karma:unit:run']
+                files: ['src/**/*.js'],
+                tasks: ['build']
             }
         },
 
@@ -86,24 +77,10 @@ module.exports = function (grunt) {
                 commitFiles: ['-a'],
                 pushTo: 'origin'
             }
-        },
-
-        karma: {
-            unit: {
-                configFile: 'test/configs/unit.conf.js',
-                browsers: ['Chrome'],
-                background: true
-            },
-            unitci_firefox: {
-                configFile: 'test/configs/unit.conf.js',
-                browsers: ['Firefox', 'PhantomJS'],
-                singleRun: true
-            }
         }
     });
 
-    grunt.registerTask('default', ['test']);
+    grunt.registerTask('default', ['build', 'watch']);
     grunt.registerTask('build', ['clean', 'jshint', 'jscs', 'concat', 'ngmin', 'uglify']);
-    grunt.registerTask('test', ['build', 'karma:unit', 'watch:all']);
-    grunt.registerTask('ci', ['build', 'karma:unitci_firefox']);
+    grunt.registerTask('ci', ['build']);
 };
