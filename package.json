@@ -1,6 +1,6 @@
 {
   "name": "angular-popup",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A better version of the Bootstrap popover, for Angular.JS",
   "main": "dist/angular-popup.js",
   "directories": {
