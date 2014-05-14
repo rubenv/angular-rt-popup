@@ -1,0 +1,19 @@
+{
+  "name": "angular-popup",
+  "version": "0.0.0",
+  "main": "dist/angular-popup.js",
+  "ignore": [
+    "**/.*",
+    "src",
+    "node_modules",
+    "bower_components",
+    "test",
+    "Gruntfile.coffee"
+  ],
+  "dependencies": {
+    "angular": "*"
+  },
+  "devDependencies": {
+    "angular-mocks": "*"
+  }
+}
