@@ -23,13 +23,63 @@ Reference it as a dependency for your app module:
 angular.module('myApp', ['rt.popup']);
 ```
 
+### Requirements
+
+This module requires:
+
+* Angular.JS (obviously)
+* JQuery (mainly for `$.contains`)
+
 ## Usage
 
-TODO
+Use the `popup-show` directive to show a popup:
 
-## API
+```html
+<a popup-show="popup.html" class="btn btn-primary">Show popup!</a>
+```
 
-TODO
+This will load `popup.html` and show it in the popup. Use [Bootstrap](http://getbootstrap.com/) classes for styling the popup (I recommend that you load the Bootstrap CSS to make it look pretty).
+
+Here's an example:
+
+```html
+<h3 class="popover-title">Hello!</h3>
+
+<div class="popover-content">
+    <p>This is a popup</p>
+
+    <a ng-click="hidePopover()" class="btn btn-primary">Go away!</a>
+</div>
+```
+
+You can use `hidePopover()` inside the popup to hide the popover. Any click outside the popup also closes it.
+
+### `popup-placement`
+
+You can control the placement of the popup by adding a `popup-placement` attribute.
+
+```html
+<a popup-show="popup.html" popup-placement="right">Show popup!</a>
+```
+
+Supported values: `right`, `left`, `bottom`.
+
+
+### `popup-if`
+
+Popups can be made conditional by adding a `popup-if` attribute. The popup will only be shown if the expression is true.
+
+```html
+<a popup-show="popup.html" popup-if="showInPopup">Show popup!</a>
+```
+
+### `popup-class`
+
+Adds extra classes to the popover wrapper.
+
+```html
+<a popup-show="popup.html" popup-class="custom-style">Show popup!</a>
+```
 
 ## License 
 
