@@ -3,7 +3,7 @@ var mod = angular.module('rt.popup', []);
 mod.factory('Popup', function ($window, $document, $timeout, $compile) {
     var openedPopup = null;
     var popups = {};
-    var template = '<div class="popover"><div ng-include="popupView"></div></div>';
+    var template = '<div class="popover"><div ng-include="popupView" onload="$reposition()"></div></div>';
 
     // Padding towards edges of screen.
     var padding = 10;
@@ -40,7 +40,7 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile) {
         scope.hidePopover = hidePopup;
 
         $timeout(function () {
-            positionPopup(anchor, scope, placement, extra_class);
+            makePopup(anchor, scope, placement, extra_class);
         });
     }
 
@@ -54,114 +54,117 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile) {
         };
     }
 
-    function positionPopup(anchor, scope, placement, extra_class) {
+    function fixPosition(anchor, element, arrow, placement, extra_class) {
         var popupPosition = null;
         var arrowPosition = null;
         var anchorPoint = null;
+        var anchorGeom = offset(anchor);
 
+        var maxHeight = $window.innerHeight - 2 * padding;
+
+        // Calculate popup position
+        if (placement === 'right') {
+            anchorPoint = {
+                top: anchorGeom.top + anchorGeom.height / 2,
+                left: anchorGeom.width - overlap
+            };
+
+            popupPosition = {
+                top: anchorPoint.top - element.height() / 2,
+                left: anchorPoint.left
+            };
+
+            // Clamp for edge of screen
+            popupPosition.top = Math.max(padding, popupPosition.top);
+
+            arrowPosition = {
+                top: anchorPoint.top - popupPosition.top
+            };
+        } else if (placement === 'left') {
+            anchorPoint = {
+                top: anchorGeom.top + anchorGeom.height / 2,
+                left: anchorGeom.left + overlap - 2
+            };
+
+            popupPosition = {
+                top: anchorPoint.top - element.height() / 2,
+                left: anchorPoint.left - element.width()
+            };
+
+            // Clamp for edge of screen
+            popupPosition.top = Math.max(padding, popupPosition.top);
+
+            arrowPosition = {
+                top: anchorPoint.top - popupPosition.top
+            };
+        } else if (placement === 'bottom') {
+            anchorPoint = {
+                top: anchorGeom.top + anchorGeom.height,
+                left: anchorGeom.left + anchorGeom.width / 2
+            };
+
+            popupPosition = {
+                top: anchorPoint.top - overlap,
+                left: anchorPoint.left - element.width() / 2
+            };
+
+            // Clamp for edge of screen
+            popupPosition.left = Math.max(padding, popupPosition.left);
+            maxHeight -= popupPosition.top;
+
+            arrowPosition = {
+                left: anchorPoint.left - popupPosition.left
+            };
+        } else {
+            throw new Error('Unsupported placement ' + placement);
+        }
+
+        element.removeClass('left right bottom top');
+        element.addClass(placement);
+        if (extra_class) {
+            element.addClass(extra_class);
+        }
+        element.css({
+            top: popupPosition.top + 'px',
+            left: popupPosition.left + 'px',
+            display: 'block',
+            maxHeight: maxHeight
+        });
+
+        var header = element.find('.popover-title');
+        var content = element.find('.popover-content');
+        var footer = element.find('.popover-footer');
+        content.css({
+            // Need to figure out where this 4 comes from.
+            maxHeight: maxHeight - footer.outerHeight() - header.outerHeight() - 4,
+            overflow: 'auto'
+        });
+
+        if (arrowPosition) {
+            arrow.css(arrowPosition);
+        }
+
+        element.removeClass('hide');
+
+        $document.on('click', loseFocus);
+    }
+
+    function makePopup(anchor, scope, placement, extra_class) {
         var element = $compile(template)(scope);
         openedPopup = element;
-
-        var anchorGeom = offset(anchor);
 
         var body = $document.find('body');
         body.append(element);
 
-        var maxHeight = body.height() - 2 * padding;
 
         // Add arrow
         var arrow = $('<div />', { 'class': 'arrow' });
         element.children('.arrow').remove();
         element.append(arrow);
 
-        // Run in timeout to make sure ngInclude finishes.
-        $timeout(function () {
-            // Calculate popup position
-            if (placement === 'right') {
-                anchorPoint = {
-                    top: anchorGeom.top + anchorGeom.height / 2,
-                    left: anchorGeom.width - overlap
-                };
-
-                popupPosition = {
-                    top: anchorPoint.top - element.height() / 2,
-                    left: anchorPoint.left
-                };
-
-                // Clamp for edge of screen
-                popupPosition.top = Math.max(padding, popupPosition.top);
-
-                arrowPosition = {
-                    top: anchorPoint.top - popupPosition.top
-                };
-            } else if (placement === 'left') {
-                anchorPoint = {
-                    top: anchorGeom.top + anchorGeom.height / 2,
-                    left: anchorGeom.left + overlap - 2
-                };
-
-                popupPosition = {
-                    top: anchorPoint.top - element.height() / 2,
-                    left: anchorPoint.left - element.width()
-                };
-
-                // Clamp for edge of screen
-                popupPosition.top = Math.max(padding, popupPosition.top);
-
-                arrowPosition = {
-                    top: anchorPoint.top - popupPosition.top
-                };
-            } else if (placement === 'bottom') {
-                anchorPoint = {
-                    top: anchorGeom.top + anchorGeom.height,
-                    left: anchorGeom.left + anchorGeom.width / 2
-                };
-
-                popupPosition = {
-                    top: anchorPoint.top - overlap,
-                    left: anchorPoint.left - element.width() / 2
-                };
-
-                // Clamp for edge of screen
-                popupPosition.left = Math.max(padding, popupPosition.left);
-                maxHeight -= popupPosition.top;
-
-                arrowPosition = {
-                    left: anchorPoint.left - popupPosition.left
-                };
-            } else {
-                throw new Error('Unsupported placement ' + placement);
-            }
-
-            element.removeClass('left right bottom top');
-            element.addClass(placement);
-            if (extra_class) {
-                element.addClass(extra_class);
-            }
-            element.css({
-                top: popupPosition.top + 'px',
-                left: popupPosition.left + 'px',
-                display: 'block',
-                maxHeight: maxHeight
-            });
-
-            var header = element.find('.popover-title');
-            var content = element.find('.popover-content');
-            var footer = element.find('.popover-footer');
-            content.css({
-                // Need to figure out where this 4 comes from.
-                maxHeight: maxHeight - footer.outerHeight() - header.outerHeight() - 4,
-                overflow: 'auto'
-            });
-
-            if (arrowPosition) {
-                arrow.css(arrowPosition);
-            }
-
-            element.removeClass('hide');
-
-            $document.on('click', loseFocus);
-        });
+        scope.$reposition = function () {
+            fixPosition(anchor, element, arrow, placement, extra_class);
+        };
     }
 
     return {

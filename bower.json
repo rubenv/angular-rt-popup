@@ -11,7 +11,8 @@
     "Gruntfile.coffee"
   ],
   "dependencies": {
-    "angular": "*"
+    "angular": "*",
+    "jquery": "*"
   },
   "devDependencies": {
     "angular-mocks": "*"
