@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         config: {
-            name: 'angular-popup',
+            name: 'angular-rt-popup',
             e2ePort: 9000
         },
 

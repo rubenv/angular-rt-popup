@@ -1,20 +1,20 @@
-# angular-popup
+# angular-rt-popup
 
 > A better version of the Bootstrap popover, for Angular.JS
 
-[![Build Status](https://travis-ci.org/rubenv/angular-popup.png?branch=master)](https://travis-ci.org/rubenv/angular-popup)
+[![Build Status](https://travis-ci.org/rubenv/angular-rt-popup.png?branch=master)](https://travis-ci.org/rubenv/angular-rt-popup)
 
 ## Installation
-Add angular-popup to your project:
+Add angular-rt-popup to your project:
 
 ```
-bower install --save angular-popup
+bower install --save angular-rt-popup
 ```
 
 Add it to your HTML file:
 
 ```html
-<script src="bower_components/angular-popup/dist/angular-popup.min.js"></script>
+<script src="bower_components/angular-rt-popup/dist/angular-rt-popup.min.js"></script>
 ```
 
 Reference it as a dependency for your app module:

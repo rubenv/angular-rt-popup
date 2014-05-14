@@ -1,7 +1,7 @@
 {
-  "name": "angular-popup",
+  "name": "angular-rt-popup",
   "version": "0.0.1",
-  "main": "dist/angular-popup.js",
+  "main": "dist/angular-rt-popup.js",
   "ignore": [
     "**/.*",
     "src",
