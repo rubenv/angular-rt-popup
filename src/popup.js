@@ -1,8 +1,7 @@
 var mod = angular.module('rt.popup', []);
 
-mod.factory('Popup', function ($window, $document, $timeout, $compile) {
+mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
     var openedPopup = null;
-    var popups = {};
     var template = '<div class="popover"><div ng-include="popupView" onload="$reposition()"></div></div>';
 
     // Padding towards edges of screen.
@@ -12,7 +11,7 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile) {
     var overlap = 5;
 
     function loseFocus(e) {
-        if (!$.contains(openedPopup[0], e.target)) {
+        if (!$.contains(openedPopup.el[0], e.target)) {
             hidePopup();
         }
     }
@@ -23,24 +22,35 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile) {
         }
 
         $timeout(function () {
-            openedPopup.hide().remove();
+            $parse(openedPopup.options.popupHidden)(openedPopup.scope);
+
+            openedPopup.el.hide().remove();
             $document.off('click', loseFocus);
+            openedPopup = null;
         });
     }
 
-    function showPopup(view, anchor, scope, placement, extra_class) {
-        if (!placement) {
-            placement = 'right';
+    function extend(obj, values) {
+        for (var key in values) {
+            if (!obj[key]) {
+                obj[key] = values[key];
+            }
         }
-        if (!extra_class) {
-            extra_class = '';
-        }
+    }
 
-        scope.popupView = view;
+    function showPopup(anchor, scope, attrs) {
+        extend(attrs, {
+            popupPlacement: 'right',
+            popupClass: '',
+            popupShown: '',
+            popupHidden: ''
+        });
+
+        scope.popupView = attrs.popupShow;
         scope.hidePopover = hidePopup;
 
         $timeout(function () {
-            makePopup(anchor, scope, placement, extra_class);
+            makePopup(anchor, scope, attrs);
         });
     }
 
@@ -54,11 +64,14 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile) {
         };
     }
 
-    function fixPosition(anchor, element, arrow, placement, extra_class) {
+    function fixPosition(scope, anchor, element, arrow, options) {
         var popupPosition = null;
         var arrowPosition = null;
         var anchorPoint = null;
         var anchorGeom = offset(anchor);
+
+        var placement = options.popupPlacement;
+        var extra_class = options.popupClass;
 
         var maxHeight = $window.innerHeight - 2 * padding;
 
@@ -147,15 +160,20 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile) {
         element.removeClass('hide');
 
         $document.on('click', loseFocus);
+
+        $parse(options.popupShown)(scope);
     }
 
-    function makePopup(anchor, scope, placement, extra_class) {
+    function makePopup(anchor, scope, options) {
         var element = $compile(template)(scope);
-        openedPopup = element;
+        openedPopup = {
+            el: element,
+            options: options,
+            scope: scope
+        };
 
         var body = $document.find('body');
         body.append(element);
-
 
         // Add arrow
         var arrow = $('<div />', { 'class': 'arrow' });
@@ -164,19 +182,12 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile) {
 
         scope.$reposition = function () {
             $timeout(function () {
-                fixPosition(anchor, element, arrow, placement, extra_class);
+                fixPosition(scope, anchor, element, arrow, options);
             });
         };
     }
 
     return {
-        register: function (element, id, scope) {
-            element.addClass('popover hide');
-            popups[id] = {
-                element: element,
-                scope: scope.$new()
-            };
-        },
         show: showPopup,
         close: hidePopup
     };
@@ -193,7 +204,7 @@ mod.directive('popupShow', function (Popup, $parse, $timeout) {
 
                     var shouldShow = $parse(attrs.popupIf || 'true');
                     if (shouldShow(scope)) {
-                        Popup.show(attrs.popupShow, element, scope, attrs.popupPlacement, attrs.popupClass);
+                        Popup.show(element, scope, attrs);
                     }
                 });
             });
