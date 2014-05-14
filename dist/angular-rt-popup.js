@@ -129,7 +129,9 @@ mod.factory('Popup', [
       element.children('.arrow').remove();
       element.append(arrow);
       scope.$reposition = function () {
-        fixPosition(anchor, element, arrow, placement, extra_class);
+        $timeout(function () {
+          fixPosition(anchor, element, arrow, placement, extra_class);
+        });
       };
     }
     return {
