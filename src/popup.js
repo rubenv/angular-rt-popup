@@ -11,7 +11,7 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
     var overlap = 5;
 
     function loseFocus(e) {
-        if (!$.contains(openedPopup.el[0], e.target)) {
+        if (openedPopup && !$.contains(openedPopup.el[0], e.target)) {
             hidePopup();
         }
     }
@@ -21,12 +21,14 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
             return;
         }
 
-        $timeout(function () {
-            $parse(openedPopup.options.popupHidden)(openedPopup.scope);
+        var popup = openedPopup;
+        openedPopup = null;
 
-            openedPopup.el.hide().remove();
+        $timeout(function () {
+            $parse(popup.options.popupHidden)(popup.scope);
+
+            popup.el.hide().remove();
             $document.off('click', loseFocus);
-            openedPopup = null;
         });
     }
 
