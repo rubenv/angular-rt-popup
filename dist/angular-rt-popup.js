@@ -70,7 +70,7 @@ mod.factory('Popup', [
       if (placement === 'right') {
         anchorPoint = {
           top: anchorGeom.top + anchorGeom.height / 2,
-          left: anchorGeom.width - overlap
+          left: anchorGeom.left + anchorGeom.width - overlap
         };
         popupPosition = {
           top: anchorPoint.top - element.height() / 2,

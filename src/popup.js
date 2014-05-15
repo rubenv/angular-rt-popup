@@ -81,7 +81,7 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
         if (placement === 'right') {
             anchorPoint = {
                 top: anchorGeom.top + anchorGeom.height / 2,
-                left: anchorGeom.width - overlap
+                left: anchorGeom.left + anchorGeom.width - overlap
             };
 
             popupPosition = {
