@@ -213,3 +213,20 @@ mod.directive('popupShow', function (Popup, $parse, $timeout) {
         }
     };
 });
+
+mod.directive('popupAutoShow', function (Popup, $parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            scope.$watch(attrs.popupAutoShow, function (val) {
+                if (val) {
+                    Popup.close();
+                    var shouldShow = $parse(attrs.popupIf || 'true');
+                    if (shouldShow(scope)) {
+                        Popup.show(element, scope, attrs);
+                    }
+                }
+            });
+        }
+    };
+});

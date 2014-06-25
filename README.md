@@ -97,8 +97,15 @@ A function that will be called when the popup is hidden.
 <a popup-show="popup.html" popup-hidden="onHidden()">Show popup!</a>
 ```
 
+### `popup-auto-show`
 
-## License 
+Will auto show the popup when it evaluates to true.
+
+```html
+<a popup-show="popup.html" popup-auto-show="showIt">Show popup!</a>
+```
+
+## License
 
     (The MIT License)
 
