@@ -104,6 +104,19 @@ mod.factory('Popup', [
         popupPosition.left = Math.max(padding, popupPosition.left);
         maxHeight -= popupPosition.top;
         arrowPosition = { left: anchorPoint.left - popupPosition.left };
+      } else if (placement === 'top') {
+        anchorPoint = {
+          top: anchorGeom.top - element.outerHeight(),
+          left: anchorGeom.left + anchorGeom.width / 2
+        };
+        popupPosition = {
+          top: anchorPoint.top + overlap,
+          left: anchorPoint.left - element.width() / 2
+        };
+        // Clamp for edge of screen
+        popupPosition.left = Math.max(padding, popupPosition.left);
+        maxHeight -= popupPosition.top;
+        arrowPosition = { left: anchorPoint.left - popupPosition.left };
       } else {
         throw new Error('Unsupported placement ' + placement);
       }
