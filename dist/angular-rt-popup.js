@@ -10,8 +10,6 @@ mod.factory('Popup', [
     var template = '<div class="popover"><div ng-include="popupView" onload="$reposition()"></div></div>';
     // Padding towards edges of screen.
     var padding = 10;
-    // Overlap with anchor element.
-    var overlap = 5;
     function loseFocus(e) {
       if (openedPopup && !$.contains(openedPopup.el[0], e.target)) {
         hidePopup();
@@ -41,7 +39,8 @@ mod.factory('Popup', [
         popupPlacement: 'right',
         popupClass: '',
         popupShown: '',
-        popupHidden: ''
+        popupHidden: '',
+        popupOverlap: 5
       });
       scope.popupView = attrs.popupShow;
       scope.hidePopover = hidePopup;
@@ -66,6 +65,7 @@ mod.factory('Popup', [
       var placement = options.popupPlacement;
       var extra_class = options.popupClass;
       var maxHeight = $window.innerHeight - 2 * padding;
+      var overlap = options.popupOverlap;
       // Calculate popup position
       if (placement === 'right') {
         anchorPoint = {

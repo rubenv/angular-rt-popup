@@ -105,6 +105,14 @@ Will auto show the popup when it evaluates to true.
 <a popup-show="popup.html" popup-auto-show="showIt">Show popup!</a>
 ```
 
+### `popup-overlap`
+
+You can control the overlap position with the anchor element by adding a `popup-overlap` attribute.
+
+```html
+<a popup-show="popup.html" popup-overlap="10">Show popup!</a>
+```
+
 ## License
 
     (The MIT License)

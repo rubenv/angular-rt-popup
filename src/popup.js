@@ -7,9 +7,6 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
     // Padding towards edges of screen.
     var padding = 10;
 
-    // Overlap with anchor element.
-    var overlap = 5;
-
     function loseFocus(e) {
         if (openedPopup && !$.contains(openedPopup.el[0], e.target)) {
             hidePopup();
@@ -45,7 +42,8 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
             popupPlacement: 'right',
             popupClass: '',
             popupShown: '',
-            popupHidden: ''
+            popupHidden: '',
+            popupOverlap: 5 // Overlap with anchor element
         });
 
         scope.popupView = attrs.popupShow;
@@ -76,6 +74,8 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
         var extra_class = options.popupClass;
 
         var maxHeight = $window.innerHeight - 2 * padding;
+
+        var overlap = options.popupOverlap;
 
         // Calculate popup position
         if (placement === 'right') {
