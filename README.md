@@ -62,7 +62,7 @@ You can control the placement of the popup by adding a `popup-placement` attribu
 <a popup-show="popup.html" popup-placement="right">Show popup!</a>
 ```
 
-Supported values: `right`, `left`, `bottom`.
+Supported values: `right`, `left`, `bottom`, `top`.
 
 
 ### `popup-if`
