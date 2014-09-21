@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-jscs-checker');
-    grunt.loadNpmTasks('grunt-ngmin');
+    grunt.loadNpmTasks('grunt-ng-annotate');
 
     grunt.initConfig({
         config: {
@@ -63,7 +63,7 @@ module.exports = function (grunt) {
             }
         },
 
-        ngmin: {
+        ngAnnotate: {
             dist: {
                 files: {
                     'dist/<%= config.name %>.js': 'dist/<%= config.name %>.js'
@@ -81,6 +81,6 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('default', ['build', 'watch']);
-    grunt.registerTask('build', ['clean', 'jshint', 'jscs', 'concat', 'ngmin', 'uglify']);
+    grunt.registerTask('build', ['clean', 'jshint', 'jscs', 'concat', 'ngAnnotate', 'uglify']);
     grunt.registerTask('ci', ['build']);
 };
