@@ -131,7 +131,6 @@ mod.factory('Popup', function ($window, $document, $timeout, $compile, $parse) {
                 left: anchorPoint.left - popupPosition.left
             };
         } else if (placement === 'top') {
-
             anchorPoint = {
                 top: anchorGeom.top - element.outerHeight(),
                 left: anchorGeom.left + anchorGeom.width / 2
