@@ -129,6 +129,27 @@ angular.module('rt.popup', [])
                 arrowPosition = {
                     left: anchorPoint.left - popupPosition.left
                 };
+            } else if (placement === 'bottom-left') {
+                anchorPoint = {
+                    top: anchorGeom.top + anchorGeom.height,
+                    left: anchorGeom.left + element.width() / 2
+                };
+
+                popupPosition = {
+                    top: anchorPoint.top - overlap,
+                    left: anchorPoint.left - element.width() / 2
+                };
+
+                // Clamp for edge of screen
+                popupPosition.left = Math.max(padding, popupPosition.left);
+                maxHeight -= popupPosition.top;
+                
+                // Update placement so we get the class name
+                placement = 'bottom';
+
+                arrowPosition = {
+                    left: anchorPoint.left - popupPosition.left
+                };
             } else if (placement === 'top') {
                 anchorPoint = {
                     top: anchorGeom.top - element.outerHeight(),
