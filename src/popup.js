@@ -143,7 +143,7 @@ angular.module('rt.popup', [])
                 // Clamp for edge of screen
                 popupPosition.left = Math.max(padding, popupPosition.left);
                 maxHeight -= popupPosition.top;
-                
+
                 // Update placement so we get the class name
                 placement = 'bottom';
 
