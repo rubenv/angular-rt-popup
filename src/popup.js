@@ -70,7 +70,6 @@ angular.module('rt.popup', [])
             var anchorGeom = offset(anchor);
 
             var placement = options.popupPlacement;
-            var extra_class = options.popupClass;
 
             var maxHeight = $window.innerHeight - 2 * padding;
 
@@ -153,9 +152,6 @@ angular.module('rt.popup', [])
 
             element.removeClass('left right bottom top');
             element.addClass(placement);
-            if (extra_class) {
-                element.addClass(extra_class);
-            }
             element.css({
                 top: popupPosition.top + 'px',
                 left: popupPosition.left + 'px',
@@ -200,6 +196,12 @@ angular.module('rt.popup', [])
             element.append(arrow);
 
             scope.$reposition = function () {
+                // add extra class here, to ensure that the width calculation takes this into account
+                var extra_class = options.popupClass;
+                if (extra_class) {
+                    element.addClass(extra_class);
+                }
+
                 $timeout(function () {
                     fixPosition(scope, anchor, element, arrow, options);
                 });
