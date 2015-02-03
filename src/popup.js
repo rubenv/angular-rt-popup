@@ -33,6 +33,7 @@ angular.module('rt.popup', [])
 
                 popup.el.hide().remove();
                 $document.off('click', loseFocus);
+                $document.off('mousedown', checkMouseDown);
             });
         }
 
