@@ -70,6 +70,8 @@ A function that can control the placement of a popup based on the given screen l
 
 The anchor object has the following properties: `top`, `left`, `width`, `height`.
 
+If this function is defined it will override the placement attribute.
+
 ```html
 <a popup-show="popup.html" popup-placement-fn="placement">Show popup!</a>
 ```
