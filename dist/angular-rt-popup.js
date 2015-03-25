@@ -48,6 +48,7 @@ angular.module('rt.popup', [])
         function showPopup(anchor, scope, attrs) {
             extend(attrs, {
                 popupPlacement: 'right',
+                popupPlacementFn: null,
                 popupClass: '',
                 popupShown: '',
                 popupHidden: '',
@@ -79,6 +80,11 @@ angular.module('rt.popup', [])
             var anchorGeom = offset(anchor);
 
             var placement = options.popupPlacement;
+
+            var fn = options.popupPlacementFn ? $parse(options.popupPlacementFn)(scope) : null;
+            if (angular.isFunction(fn)) {
+                placement = fn(anchorGeom);
+            }
 
             var maxHeight = $window.innerHeight - 2 * padding;
 
