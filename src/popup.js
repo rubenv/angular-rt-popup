@@ -52,7 +52,7 @@ angular.module('rt.popup', [])
                 popupClass: '',
                 popupShown: '',
                 popupHidden: '',
-                popupOverlap: 5 // Overlap with anchor element
+                popupOverlap: '5' // Overlap with anchor element
             });
 
             scope.popupView = attrs.popupShow;
@@ -88,7 +88,7 @@ angular.module('rt.popup', [])
 
             var maxHeight = $window.innerHeight - 2 * padding;
 
-            var overlap = options.popupOverlap;
+            var overlap = +options.popupOverlap;
 
             // Calculate popup position
             if (placement === 'right') {
